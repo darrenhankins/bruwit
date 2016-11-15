@@ -1,0 +1,57 @@
+body {
+    font-family: 'Quicksand', sans-serif;
+    /*font-family: 'Rancho', cursive;*/
+    height: 100vh;
+    dispay: flex;
+    background: lightblue;
+}
+
+header {
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    background: white;
+}
+
+header h1 {
+    font-family: 'Marck Script', cursive;
+    font-size: 5em;
+    padding-left: 1em;
+}
+
+header p {
+    padding-left: 5em;
+    /*margin-top: 0em;*/
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1em;
+}
+
+.input {
+    display: flex;
+    justify-content: center;
+    padding: 2em;
+}
+
+#city{
+  background: white;
+}
+
+.state{
+  background: white;
+  width: 100%;
+}
+
+.back {
+  display:flex;
+  justify-content: center;
+  margin-top: 5em;
+}
+
+/*select, option { width:10%; }*/
+
+.box {
+    /*height: 50vh;*/
+    /*margin-top: 4em;*/
+    /*background: red;*/
+    border: 1px solid grey;
+}
