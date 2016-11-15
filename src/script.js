@@ -113,12 +113,14 @@ function addClickHandler() {
             // var data = 'data'+num;
              data = dataInit.data;
             for (var i = 0; i < data.length; i++) {
+                  var id = data[i].brewery.id;
                   var name = data[i].brewery.name;
                   var city = data[i].locality;
+
                   // PRINT out initital list
                   window.num+=1;
                   num = window.num;
-                  $( ".list" ).append( "<p>"+num+" <a href='' id='"+name+"'>"+name+"</a>, "+city+"</p>" );
+                  $( ".list" ).append( "<p>"+num+" <a href='' id='"+id+"'>"+name+"</a>, "+city+"</p>" );
                   console.log(num+" "+name);
 
               }
