@@ -9,8 +9,9 @@ $(document).ready(function() {
     // var url = 'https://galvanize-cors-proxy.herokuapp.com/http://api.brewerydb.com/v2/brewery/xkRG5v/?key=e69236fa88100168ab782a0069667bbc'
 
     stateSelect();
-    window.num = 0;
+
     $('select').change(function() {
+      window.num = 0;
       $('.city-input').show();
       $('.back').show();
       $('.data').show();
@@ -35,23 +36,24 @@ $(document).ready(function() {
       stateSelect();
       $('.state-input').val('');
       $('.state-input').show();
+      $('.list').hide();
     });
 
 
 
     function stateSelect (){
-      $('select').material_select();
+      // $('select').material_select();
       $('.city-input').hide();
       $('.back').hide();
       $('.data').hide();
     }
 
-    var bottomOfPage = false;
+    window.bottomOfPage = false;
     $(window).scroll(function () {
        if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
-        //  if (!bottomOfPage) {
-          bottomOfPage = true;
-          console.log(bottomOfPage);
+         if (!window.bottomOfPage) {
+          window.bottomOfPage = true;
+          console.log(window.bottomOfPage);
           // alert('end of page');
           var state = $('#state').val();
           var city = $('#city').val();
@@ -63,7 +65,7 @@ $(document).ready(function() {
             var getLocations = 'https://galvanize-cors-proxy.herokuapp.com/http://api.brewerydb.com/v2/locations/?key=e69236fa88100168ab782a0069667bbc&region='+state+'&locality='+city;
           }
           getDataLocations(getLocations);
-        // }
+        }
        }
     });
 
