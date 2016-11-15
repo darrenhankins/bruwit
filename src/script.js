@@ -9,8 +9,10 @@ $(document).ready(function() {
     // var url = 'https://galvanize-cors-proxy.herokuapp.com/http://api.brewerydb.com/v2/brewery/xkRG5v/?key=e69236fa88100168ab782a0069667bbc'
 
     stateSelect();
-    window.num = 0;
+
     $('select').change(function() {
+      window.num = 0;
+
       $('.city-input').show();
       $('.back').show();
       $('.data').show();
@@ -18,7 +20,12 @@ $(document).ready(function() {
 
     $('.data').click(function() {
       $('.state-input').val('');
-      $('.state-input').show();
+      $('.state-input').hide();
+      $('.city-input').hide();
+      $('.back').show();
+      $('.data').hide();
+
+
       var state = $('#state').val();
       var city = $('#city').val();
       console.log("State: "+state);
@@ -28,13 +35,27 @@ $(document).ready(function() {
       } else {
         var getLocations = 'https://galvanize-cors-proxy.herokuapp.com/http://api.brewerydb.com/v2/locations/?key=e69236fa88100168ab782a0069667bbc&region='+state+'&locality='+city;
       }
-      getDataLocations(getLocations);
+      window.currentPage = 1;
+      getDataLocations(getLocations, 1);
     });
+
+function addClickHandler() {
+    $("a").click(function(event) {
+      event.preventDefault();
+      var href = $(this).attr('id');
+      console.log(href);
+    });
+  }
 
     $('.back').click(function() {
       stateSelect();
+      $( ".list" ).empty();
       $('.state-input').val('');
       $('.state-input').show();
+      $('.city-input').show();
+      $('.data').show();
+      window.num = 0;
+
     });
 
 
@@ -46,36 +67,44 @@ $(document).ready(function() {
       $('.data').hide();
     }
 
-    var bottomOfPage = false;
+    window.bottomOfPage = false;
     $(window).scroll(function () {
+      // console.log("windowScroll: "+$(window).scrollTop());
+      // console.log("documentHeight: "+$(document).height());
+      // console.log("windowHeight: "+$(window).height());
+      // console.log("document-WindowHeight-10: "+($(document).height() - $(window).height() - 10));
+
+
+      // -10 indicates how far away from end of page user must be before function executes. This gives you the flexibility to adjust the behavior as needed.
        if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
-        //  if (!bottomOfPage) {
-          bottomOfPage = true;
-          console.log(bottomOfPage);
-          // alert('end of page');
+         if (!window.bottomOfPage) {
+          window.bottomOfPage = true;
+          console.log(window.bottomOfPage);
           var state = $('#state').val();
           var city = $('#city').val();
           console.log("State: "+state);
           console.log("City: "+city);
+          window.currentPage+=1;
           if (!city) {
             var getLocations = 'https://galvanize-cors-proxy.herokuapp.com/http://api.brewerydb.com/v2/locations/?key=e69236fa88100168ab782a0069667bbc&region='+state;
           } else {
             var getLocations = 'https://galvanize-cors-proxy.herokuapp.com/http://api.brewerydb.com/v2/locations/?key=e69236fa88100168ab782a0069667bbc&region='+state+'&locality='+city;
           }
-          getDataLocations(getLocations);
-        // }
+          getDataLocations(getLocations, window.currentPage);
+        }
        }
     });
 
 
-    function getDataLocations(getLocations){
+    function getDataLocations(getLocations, page){
+      var getLocations = getLocations+"&p="+page;
       $.get(getLocations, function(dataInit) {
-          console.log("dataInit: "+dataInit);
-          console.log("Current Page: "+dataInit.currentPage);
-          console.log("Total Page: "+dataInit.numberOfPages);
+
           var currentPage = dataInit.currentPage;
           var totalPages = dataInit.numberOfPages;
-
+          console.log(dataInit);
+          console.log("Current Page: "+dataInit.currentPage);
+          console.log("Total Page: "+dataInit.numberOfPages);
 
           if (!dataInit.data){
             console.log("no data");
@@ -85,33 +114,17 @@ $(document).ready(function() {
              data = dataInit.data;
             for (var i = 0; i < data.length; i++) {
                   var name = data[i].brewery.name;
+                  var city = data[i].locality;
                   // PRINT out initital list
                   window.num+=1;
                   num = window.num;
-                  $( ".list" ).append( "<p>"+num+" "+name+"</p>" );
+                  $( ".list" ).append( "<p>"+num+" <a href='' id='"+name+"'>"+name+"</a>, "+city+"</p>" );
                   console.log(num+" "+name);
 
               }
+              addClickHandler();
               window.bottomOfPage = false;
               console.log(window.bottomOfPage);
-
-            // for (var i = 0; currentPage<totalPages; i++ ) {
-            //   currentPage += 1;
-            //   getLocations+="$p="+currentPage;
-            //   data = "data"+currentPage;
-            //   console.log(data);
-            //   $.get(getLocations, function(newData) {
-            //     console.log("Data"+currentPage+": "+newData);
-            //     var dataList = newData.data;
-            //     console.log(dataList.length);
-            //     for (var i = 0; i < dataList.length; i++) {
-            //         var name = dataList[i].brewery.name;
-            //         // PRINT out initital list
-            //         num+=1;
-            //         console.log(num+" "+name);
-            //     }
-            //   });
-            // }
           }
 
 
