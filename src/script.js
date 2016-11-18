@@ -16,14 +16,6 @@ $(document).ready(function() {
       $('.brewery-item-screen').hide();
       $('.beer-list-screen').hide();
       $('.beer-item-screen').hide();
-
-      $('.brewery-list').empty();
-      $('.beer-list-detail').empty();
-      $('.beer-label').empty();
-      $('.beer-info').empty();
-      $('.brewery-image').empty();
-      $('.brewery-title').empty();
-      $('.brewery-details').empty();
     }
 
     function screenSelect(navState) {
@@ -93,8 +85,7 @@ $(document).ready(function() {
     });
 
     function getBreweryInformationClickHandler() {
-        // $('a').click(function(event) {
-        $('.get-brewery-info').click(function(event) {
+        $('a').click(function(event) {
             console.log("THIs has run");
             event.preventDefault();
             console.log("You're here");
@@ -104,17 +95,16 @@ $(document).ready(function() {
               addBreweryInformation(id);
             } else{
             }
-            // $("a").off('click', getBreweryInformationClickHandler);
-            $('.get-brewery-info').off('click', getBreweryInformationClickHandler);
+            $("a").off('click', getBreweryInformationClickHandler);
         });
     }
 
     function getBeerListClickHandler(){
-      $('.get-beer-list').click(function(event) {
+      $("a").click(function(event) {
           event.preventDefault();
           var id = $(this).attr('id');
           addBeerList(id);
-          $('.get-beer-list').off('click', getBeerListClickHandler);
+          $("a").off('click', getBeerListClickHandler);
       });
     }
 
@@ -135,7 +125,7 @@ $(document).ready(function() {
                     var city = data[i].locality;
                     window.num += 1;
                     num = window.num;
-                    $(".brewery-list").append('<a href="#!" id="'+id+'" class="collection-item get-brewery-info">'+name+', '+city+'</a>');
+                    $(".brewery-list").append('<a href="#!" id="'+id+'" class="collection-item">'+name+', '+city+'</a>');
                 }
                 getBreweryInformationClickHandler();
                 console.log("just got here");
@@ -191,7 +181,7 @@ $(document).ready(function() {
                 for (var i = 0; i < data.length; i++) {
                     var id = data[i].id;
                     var name = data[i].name;
-                    $(".beer-list-detail").append("<p><a href='#' id='"+id+" class='.get-beer-list'>" + name + "</a></p>");
+                    $(".beer-list-detail").append("<p><a href='#' id='"+id+" class='get-beer-info' >" + name + "</a></p>");
                 }
                 getBeerInformationClickHandler();
              }
@@ -199,13 +189,12 @@ $(document).ready(function() {
     }
 
     function getBeerInformationClickHandler(){
-      $('.get-beer-list').click(function(event) {
+      $('.get-beer-info').click(function(event) {
           event.preventDefault();
           screenSelect('beer');
           var id = $(this).attr('id');
-          console.log("HEEEEEEERE");
           getBeerInformation(id);
-          $('.get-beer-list').off('click', getBeerInformationClickHandler);
+          $('.get-beer-info').off('click', getBeerInformationClickHandler);
       });
     }
 
