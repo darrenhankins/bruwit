@@ -22,29 +22,40 @@ $(document).ready(function() {
       switch(navState){
         case 'main':
           console.log('navState= '+navState);
+          hideAll();
           $('select').material_select();
           $('.state-dropdown').val('');
-          hideAll();
           $('.search-screen').show();
           break;
         case 'search':
           console.log('navState= '+navState);
+          console.log('STOP');
           hideAll();
           $('.search-screen').show();
           $('.city-input').show();
           $('.search-button').show();
+          window.num = 0;
           break;
         case 'breweryList':
           console.log('navState= '+navState);
           hideAll();
-          // $('.back-button').show();
+          $('.back-button').show();
           $(".brewery-list-screen").show();
+          var state = $('#state').val();
+          var city = $('#city').val();
+          if (!city) {
+              var getLocations = 'https://galvanize-cors-proxy.herokuapp.com/http://api.brewerydb.com/v2/locations/?key=e69236fa88100168ab782a0069667bbc&region=' + state;
+          } else {
+              var getLocations = 'https://galvanize-cors-proxy.herokuapp.com/http://api.brewerydb.com/v2/locations/?key=e69236fa88100168ab782a0069667bbc&region=' + state + '&locality=' + city;
+          }
+          getBreweryList(getLocations, 1);
+          window.currentPage = 1;
           window.backButton = 'search';
           break;
         case 'brewery':
           console.log('navState= '+navState);
           hideAll();
-          // $('.back-button').show();
+          $('.back-button').show();
           $('.brewery-item-screen').show();
           $('.beer-list-screen').show();
           window.backButton = 'breweryList';
@@ -52,40 +63,32 @@ $(document).ready(function() {
         case 'beer':
           console.log('navState= '+navState);
           hideAll();
-          // $('.back-button').show();
+          $('.back-button').show();
           $('.beer-item-screen').show();
-          // $(".brewery-item-screen").empty();
+          $(".brewery-item-screen").empty();
           window.backButton = 'brewery';
           break;
       }
     }
 
     $('select').change(function() {
-        window.num = 0;
         screenSelect('search');
     });
 
     $('.search-button').click(function() {
         screenSelect('breweryList');
-        var state = $('#state').val();
-        var city = $('#city').val();
-        if (!city) {
-            var getLocations = 'https://galvanize-cors-proxy.herokuapp.com/http://api.brewerydb.com/v2/locations/?key=e69236fa88100168ab782a0069667bbc&region=' + state;
-        } else {
-            var getLocations = 'https://galvanize-cors-proxy.herokuapp.com/http://api.brewerydb.com/v2/locations/?key=e69236fa88100168ab782a0069667bbc&region=' + state + '&locality=' + city;
-        }
-        window.currentPage = 1;
-        getBreweryList(getLocations, 1);
     });
 
     $('.back-button').click(function() {
         window.num = 0;
-        screenSelect("main");
+        screenSelect(window.backButton);
     });
 
     function getBreweryInformationClickHandler() {
-        $("a").click(function(event) {
+        $('a').click(function(event) {
+            console.log("THIs has run");
             event.preventDefault();
+            console.log("You're here");
             screenSelect('brewery');
             var id = $(this).attr('id');
             if (id){
@@ -125,6 +128,7 @@ $(document).ready(function() {
                     $(".brewery-list").append('<a href="#!" id="'+id+'" class="collection-item">'+name+', '+city+'</a>');
                 }
                 getBreweryInformationClickHandler();
+                console.log("just got here");
                 window.bottomOfPage = false;
             }
         });
@@ -134,6 +138,7 @@ $(document).ready(function() {
         var url = 'https://galvanize-cors-proxy.herokuapp.com/http://api.brewerydb.com/v2/brewery/' + id + '/?key=e69236fa88100168ab782a0069667bbc';
         getBeerList(id);
         $.get(url, function(data) {
+          console.log(data);
             var name = data.data.name;
             if (data.data.website) {
                 website = data.data.website;

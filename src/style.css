@@ -69,6 +69,10 @@ header p {
     /*border: 1px solid grey;*/
 }
 
+.beer-item-screen {
+  /*background: green;*/
+}
+
 main {
   padding-top: 25px;
 }
